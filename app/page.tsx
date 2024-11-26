@@ -4,9 +4,9 @@ import FormDetails from "@/components/form-details";
 import StripeForm from "@/components/stripe-form";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { createBrowserClient } from "@/lib/supabase/client";
 
 const formDetailsValidationSchema = Yup.object({
   promotionCode: Yup.string().min(5, 'Promotion code must be at least 5 characters').optional(),
@@ -22,7 +22,7 @@ const stripeFormValidationSchema = Yup.object({
 
 export default function Home() {
 
-  const supabase = createClient();
+  const supabase = createBrowserClient();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
