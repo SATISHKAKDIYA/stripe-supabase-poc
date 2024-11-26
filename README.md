@@ -15,24 +15,24 @@ This project is a Next.js application integrated with Supabase, a backend-as-a-s
 
 1. **Clone the Repository**
 
-   git clone <repository-url>
-   cd <repository-name>
+   git clone git@github.com:satishkakdiya/stripe-supabase-poc.git
+
+   cd stripe-supabase-poc
 
 2. **Install Dependencies**
 
     npm install
-    # or
+    or
     yarn install
 
 3. **Set Up Environment Variables**
 
-Create a .env.local file in the root of the project and add the following:
+Create a .env file in the root of the project and add the following:
 
-    POSTGRES_URL=<Your PostgreSQL URL>
     NEXT_PUBLIC_SUPABASE_URL=<Your Supabase Project URL>
     NEXT_PUBLIC_SUPABASE_ANON_KEY=<Your Supabase Anon Key>
 
-    create payment table with fields id, name, email, card_number, expiry_date, and cvv and table name must be Payment.
+    create payment table manually with fields id, name, email, card_number, expiry_date, and cvv and table name must be Payment.
 
 4. **Start the Development Server**
 
