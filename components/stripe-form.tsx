@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { IoCardSharp } from "react-icons/io5";
+import { Loader } from "lucide-react";
+import { useState } from "react";
 
 interface StripeFormValues {
   email: string;
@@ -16,10 +18,13 @@ interface StripeFormValues {
 
 interface StripeFormProps {
   formik: FormikProps<StripeFormValues>;
+  isSubmitting: boolean;
 }
 
-export default function StripeForm({ formik }: StripeFormProps) {
+export default function StripeForm({ formik, isSubmitting }: StripeFormProps) {
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } = formik;
+
+  const [maskedCVC, setMaskedCVC] = useState('');
 
   const handleCardInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '');
@@ -34,6 +39,29 @@ export default function StripeForm({ formik }: StripeFormProps) {
       value = value.slice(0, 2) + ' / ' + value.slice(2, 4);
     }
     formik.setFieldValue('expirationDate', value);
+  };
+
+  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+
+    if (/^\d{0,3}$/.test(input)) {
+      formik.setFieldValue('cvc', input); 
+      setMaskedCVC(input); 
+    }
+  };
+
+  const handleCvvBlur = () => {
+    const { cvc } = values;
+
+    if (cvc.length > 0) {
+      setMaskedCVC('*'.repeat(cvc.length));
+    }
+  };
+
+  const handleCvvFocus = () => {
+    const { cvc } = values;
+
+      setMaskedCVC(cvc);
   };
 
   return (
@@ -92,9 +120,10 @@ export default function StripeForm({ formik }: StripeFormProps) {
                 />
                 <Input
                   name="cvc"
-                  value={values.cvc}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  value={maskedCVC}
+                  onChange={handleCvvChange}
+                  onBlur={handleCvvBlur}
+                  onFocus={handleCvvFocus}
                   type="text"
                   className={`flex rounded-br-md rounded-t-none rounded-bl-none border-l-0
                       ${errors.cvc && touched.cvc ? 'border-red-500 border-t-1 border-l-1 border-t-red-500' : 'border-t-0'}
@@ -126,10 +155,12 @@ export default function StripeForm({ formik }: StripeFormProps) {
           </div>
         </div>
         <Button
-          className="mt-5 bg-[#0074D4] text-white font-medium hover:bg-[#0074D4]"
+          type="submit"
+          className="mt-5 bg-[#0074D4] text-white font-bold hover:bg-[#0074D4]"
           onClick={() => handleSubmit()}
+          disabled={isSubmitting}
         >
-          Subscribe
+          {isSubmitting ? <Loader className="mr-2" /> : "Subscribe"}
         </Button>
       </div>
     </div>

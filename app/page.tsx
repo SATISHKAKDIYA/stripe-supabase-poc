@@ -4,6 +4,9 @@ import FormDetails from "@/components/form-details";
 import StripeForm from "@/components/stripe-form";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { createClient } from "@/lib/supabase/client";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const formDetailsValidationSchema = Yup.object({
   promotionCode: Yup.string().min(5, 'Promotion code must be at least 5 characters').optional(),
@@ -18,6 +21,11 @@ const stripeFormValidationSchema = Yup.object({
 });
 
 export default function Home() {
+
+  const supabase = createClient();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const formDetailsFormik = useFormik({
     initialValues: {
       promotionCode: '',
@@ -37,8 +45,37 @@ export default function Home() {
       cvc: '',
     },
     validationSchema: stripeFormValidationSchema,
-    onSubmit: (values) => {
-      console.log("StripeForm Submitted:", values);
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      try {
+        const { error } = await supabase.from("Payment").insert({
+          name: values.cardHolderName,
+          email: values.email,
+          card_number: values.cardInfo,
+          expiry_date: values.expirationDate,
+          cvv: values.cvc
+        });
+
+        if (error) {
+          console.error("Error inserting data:", error);
+          toast({
+            title: "Error",
+            description: "Failed to store payment data. Please try again.",
+            variant: "destructive",
+          });
+        } else {
+          stripeFormFormik.resetForm();
+          toast({
+            title: "Success",
+            description: "Payment data stored successfully!",
+            variant: "default",
+          });
+        }
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      } finally {
+        setIsSubmitting(false); 
+      }
     },
   });
 
@@ -48,7 +85,7 @@ export default function Home() {
         <FormDetails formik={formDetailsFormik} />
       </div>
       <div className="flex flex-col w-[100%] lg:w-[50%]">
-        <StripeForm formik={stripeFormFormik} />
+        <StripeForm formik={stripeFormFormik} isSubmitting={isSubmitting} />
       </div>
     </div>
   );

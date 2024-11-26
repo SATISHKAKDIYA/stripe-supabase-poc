@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js with Supabase
 
-## Getting Started
+This project is a Next.js application integrated with Supabase, a backend-as-a-service platform providing real-time database, authentication, and storage functionalities. 
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js** for building server-rendered and static websites.
+- **Supabase** for backend services, including:
+  - PostgreSQL database
+  - Authentication
+  - Realtime data sync
+  - File storage
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup and Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the Repository**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   git clone <repository-url>
+   cd <repository-name>
 
-## Learn More
+2. **Install Dependencies**
 
-To learn more about Next.js, take a look at the following resources:
+    npm install
+    # or
+    yarn install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Set Up Environment Variables**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a .env.local file in the root of the project and add the following:
 
-## Deploy on Vercel
+    POSTGRES_URL=<Your PostgreSQL URL>
+    NEXT_PUBLIC_SUPABASE_URL=<Your Supabase Project URL>
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=<Your Supabase Anon Key>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    create payment table with fields id, name, email, card_number, expiry_date, and cvv and table name must be Payment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Start the Development Server**
+
+Run the following command to start the development server:
+
+    npm run dev
+    # or
+    yarn dev
